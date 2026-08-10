@@ -1,9 +1,16 @@
 # 배달대행 정산관리 플랫폼
 
+[![CI](https://github.com/inchoriya/cheongrim-settlement/actions/workflows/ci.yml/badge.svg)](https://github.com/inchoriya/cheongrim-settlement/actions/workflows/ci.yml)
+
 배달대행 주문의 수수료를 계산하고, 주간 정산을 만든 뒤 가맹점에 지급하는 흐름까지 구현한 B2B 정산 시스템입니다.  
 청림인베스트 채용 공고의 핵심 사업(배달대행 정산 관리)을 기준으로 설계했습니다.
 
 데모 영상: [docs/demo-assets/cheongrim-demo.webm](./docs/demo-assets/cheongrim-demo.webm)
+
+![정산 상세](./docs/screenshots/05-admin-settlement-detail.png)
+
+> 주문 단위 수수료 분해 화면. 각 행에서 `주문금액 = 플랫폼 + 대행 + 라이더 + 가맹점`이 성립합니다.  
+> 전체 화면은 [docs/screenshots/](./docs/screenshots/)에 있습니다.
 
 ## 무엇을 다루나
 

@@ -35,6 +35,9 @@ export default function SettlementDetailPage() {
   if (error && !settlement) return <p className="error-text">{error}</p>
   if (!settlement) return <p className="muted">불러오는 중...</p>
 
+  const actionableStatuses = ['CALCULATED', 'HELD', 'CONFIRMED']
+  const showActions = hasRole('ADMIN') && actionableStatuses.includes(settlement.status)
+
   return (
     <section className="stack">
       <div className="section-head">
@@ -51,7 +54,7 @@ export default function SettlementDetailPage() {
 
       {error && <p className="error-text">{error}</p>}
 
-      {hasRole('ADMIN') && (
+      {showActions && (
         <div className="panel actions">
           {settlement.status === 'CALCULATED' && (
             <>
