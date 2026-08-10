@@ -33,8 +33,8 @@ export default function DashboardPage() {
   return (
     <section className="stack">
       <div className="section-head">
-        <h2>대시보드</h2>
-        <p>현재 권한 범위 기준 운영 요약입니다.</p>
+        <h2>운영 요약</h2>
+        <p>로그인한 권한 범위의 주문·정산·지급 현황입니다.</p>
       </div>
 
       <div className="stat-grid">

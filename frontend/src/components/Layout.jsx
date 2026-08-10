@@ -28,7 +28,7 @@ export default function Layout() {
           <span className="brand-mark">CI</span>
           <div>
             <strong>청림인베스트</strong>
-            <p>정산관리 시스템</p>
+            <p>정산관리</p>
           </div>
         </div>
         <nav>
@@ -42,8 +42,8 @@ export default function Layout() {
       <div className="main">
         <header className="topbar">
           <div>
-            <h1>운영 워크스페이스</h1>
-            <p>주문 · 정산 · 지급을 한 흐름으로 관리합니다.</p>
+            <h1>정산 운영</h1>
+            <p>주문 · 정산 · 지급을 한 흐름으로 처리합니다.</p>
           </div>
           <div className="user-chip">
             <div>
