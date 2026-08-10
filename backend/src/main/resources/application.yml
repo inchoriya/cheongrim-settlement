@@ -1,0 +1,65 @@
+spring:
+  application:
+    name: settlehub
+  profiles:
+    default: local
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    url: jdbc:h2:mem:settlehub;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+settlehub:
+  jwt:
+    secret: settlehub-local-dev-secret-key-change-me-32bytes-min
+    expiration-seconds: 3600
+  seed:
+    enabled: true
+  cors:
+    allowed-origins: http://localhost:5173,http://127.0.0.1:5173,http://localhost,http://127.0.0.1
+  payout:
+    # mock | toss  (토스 실키 연결 시 toss + TOSS_* 환경변수)
+    provider: ${PAYOUT_PROVIDER:mock}
+    toss:
+      secret-key: ${TOSS_SECRET_KEY:}
+      security-key: ${TOSS_SECURITY_KEY:}
+      base-url: ${TOSS_BASE_URL:https://api.tosspayments.com}
+      schedule-type: ${TOSS_SCHEDULE_TYPE:SCHEDULED}
+      payout-date: ${TOSS_PAYOUT_DATE:}
+
+logging:
+  level:
+    com.settlehub: INFO

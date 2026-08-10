@@ -1,0 +1,10 @@
+{
+	email {$ACME_EMAIL}
+}
+
+{$DOMAIN} {
+	encode gzip
+
+	# SPA + /api 프록시는 web(nginx)이 담당
+	reverse_proxy web:80
+}

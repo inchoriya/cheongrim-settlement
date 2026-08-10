@@ -1,0 +1,39 @@
+# HTTPS 오버레이 (Caddy + Let's Encrypt)
+# 사용:
+#   docker compose \
+#     -f docker-compose.prod.yml \
+#     -f docker-compose.https.yml \
+#     --env-file deploy/.env.prod \
+#     up -d --build
+#
+# 필요 env: DOMAIN, ACME_EMAIL
+# 보안그룹: 80, 443 개방 / 도메인 A레코드 → EC2
+
+services:
+  web:
+    # 호스트 포트 제거 — 외부 진입은 Caddy만
+    ports: !reset []
+
+  caddy:
+    image: caddy:2.8-alpine
+    container_name: settlehub-caddy
+    restart: unless-stopped
+    depends_on:
+      - web
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      DOMAIN: ${DOMAIN:?DOMAIN is required}
+      ACME_EMAIL: ${ACME_EMAIL:?ACME_EMAIL is required}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - settlehub
+
+volumes:
+  caddy_data:
+  caddy_config:

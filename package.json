@@ -1,0 +1,12 @@
+{
+  "name": "cheongrim-settlement",
+  "private": true,
+  "description": "배달대행 정산관리 플랫폼",
+  "scripts": {
+    "demo:install": "playwright install chromium",
+    "demo:record": "node scripts/demo-record.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}
