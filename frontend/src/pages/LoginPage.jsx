@@ -4,7 +4,7 @@ import { useAuth } from '../auth/AuthContext'
 
 const DEMO_PASSWORD = 'Demo1234!'
 const DEMOS = [
-  { email: 'admin@cheongrim.local', role: '관리자' },
+  { email: 'admin@cheongnim.local', role: '관리자' },
   { email: 'agency@seoul.local', role: '대행사' },
   { email: 'merchant@kimbap.local', role: '가맹점' },
 ]
@@ -42,7 +42,7 @@ export default function LoginPage() {
     <div className="login-page">
       <section className="login-visual" aria-hidden="false">
         <div className="login-copy">
-          <p className="login-kicker">CHEONGRIM INVEST</p>
+          <p className="login-kicker">CHEONGNIM INVEST</p>
           <h1>배달대행 정산을 정확하게.</h1>
           <p>주문 수집부터 수수료 계산, 주간 정산, 지급까지 한곳에서 운영합니다.</p>
         </div>

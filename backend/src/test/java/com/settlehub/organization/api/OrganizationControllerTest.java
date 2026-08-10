@@ -29,7 +29,7 @@ class OrganizationControllerTest {
     @Test
     @DisplayName("ADMIN은 대행사/가맹점을 생성하고 조회할 수 있다")
     void adminCreatesAgencyAndMerchant() throws Exception {
-        String token = login("admin@cheongrim.local", "Demo1234!");
+        String token = login("admin@cheongnim.local", "Demo1234!");
         String code = "AG-NEW-" + System.nanoTime();
 
         MvcResult agencyResult = mockMvc.perform(post("/api/v1/agencies")

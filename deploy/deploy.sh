@@ -27,4 +27,4 @@ curl -fsS "http://127.0.0.1/actuator/health" || curl -fsS "http://127.0.0.1:8080
 
 echo
 echo "UI: http://<EC2_PUBLIC_IP>"
-echo "Demo: admin@cheongrim.local / Demo1234!  (SEED_ENABLED=true 인 경우)"
+echo "Demo: admin@cheongnim.local / Demo1234!  (SEED_ENABLED=true 인 경우)"

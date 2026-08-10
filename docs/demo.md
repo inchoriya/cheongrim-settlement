@@ -1,6 +1,6 @@
 # 데모 가이드
 
-영상: [demo-assets/cheongrim-demo.webm](./demo-assets/cheongrim-demo.webm)  
+영상: [demo-assets/cheongnim-demo.webm](./demo-assets/cheongnim-demo.webm)  
 (관리자 → 대행사 → 가맹점 순으로 화면을 돌린 녹화본입니다.)
 
 ## 계정
@@ -9,7 +9,7 @@
 
 | 역할 | 이메일 |
 |------|--------|
-| 관리자 | admin@cheongrim.local |
+| 관리자 | admin@cheongnim.local |
 | 대행사 | agency@seoul.local |
 | 가맹점 | merchant@kimbap.local |
 

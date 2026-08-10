@@ -61,7 +61,7 @@ public class TossPayoutGateway implements PayoutGateway {
                 "name", request.merchantName(),
                 "representativeName", request.accountHolder(),
                 "businessRegistrationNumber", "1234567890",
-                "email", "merchant+" + request.beneficiaryId() + "@cheongrim.local",
+                "email", "merchant+" + request.beneficiaryId() + "@cheongnim.local",
                 "phone", "01012345678"
         ));
 

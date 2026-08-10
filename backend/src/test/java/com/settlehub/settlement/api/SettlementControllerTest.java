@@ -50,7 +50,7 @@ class SettlementControllerTest {
     @DisplayName("배치 실행 후 정산 금액이 룰과 일치하고 확정할 수 있다")
     void batchConfirmReadyFlow() throws Exception {
         String agencyToken = login("agency@seoul.local", "Demo1234!");
-        String adminToken = login("admin@cheongrim.local", "Demo1234!");
+        String adminToken = login("admin@cheongnim.local", "Demo1234!");
 
         String o1 = "SET-O1-" + System.nanoTime();
         String o2 = "SET-O2-" + System.nanoTime();
@@ -132,7 +132,7 @@ class SettlementControllerTest {
     @DisplayName("MERCHANT는 본인 정산만 조회한다")
     void merchantScope() throws Exception {
         String agencyToken = login("agency@seoul.local", "Demo1234!");
-        String adminToken = login("admin@cheongrim.local", "Demo1234!");
+        String adminToken = login("admin@cheongnim.local", "Demo1234!");
         String merchantToken = login("merchant@kimbap.local", "Demo1234!");
 
         String externalId = "SET-M-" + System.nanoTime();

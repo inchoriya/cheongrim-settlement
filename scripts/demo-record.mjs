@@ -135,7 +135,7 @@ async function main() {
     throw new Error('녹화 파일이 생성되지 않았습니다.')
   }
   const src = videos[0].full
-  const dest = path.join(OUT_DIR, 'cheongrim-demo.webm')
+  const dest = path.join(OUT_DIR, 'cheongnim-demo.webm')
   fs.copyFileSync(src, dest)
   // raw는 임시본만 남기고 정리
   for (const v of videos.slice(1)) {

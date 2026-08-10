@@ -30,13 +30,13 @@ class AuthControllerTest {
     @Test
     @DisplayName("관리자 로그인 후 me 조회가 성공한다")
     void loginAndMe() throws Exception {
-        String token = login("admin@cheongrim.local", "Demo1234!");
+        String token = login("admin@cheongnim.local", "Demo1234!");
 
         mockMvc.perform(get("/api/v1/auth/me")
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.data.email").value("admin@cheongrim.local"))
+                .andExpect(jsonPath("$.data.email").value("admin@cheongnim.local"))
                 .andExpect(jsonPath("$.data.role").value("ADMIN"));
     }
 
@@ -46,7 +46,7 @@ class AuthControllerTest {
         mockMvc.perform(post("/api/v1/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                                {"email":"admin@cheongrim.local","password":"wrong-pass"}
+                                {"email":"admin@cheongnim.local","password":"wrong-pass"}
                                 """))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.error.code").value("UNAUTHORIZED"));
@@ -70,7 +70,7 @@ class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
-                                  "email":"new@cheongrim.local",
+                                  "email":"new@cheongnim.local",
                                   "password":"Demo1234!",
                                   "name":"신규",
                                   "role":"ADMIN"
@@ -83,21 +83,21 @@ class AuthControllerTest {
     @Test
     @DisplayName("ADMIN은 사용자를 등록할 수 있다")
     void adminCanRegister() throws Exception {
-        String token = login("admin@cheongrim.local", "Demo1234!");
+        String token = login("admin@cheongnim.local", "Demo1234!");
 
         mockMvc.perform(post("/api/v1/auth/register")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
-                                  "email":"admin2@cheongrim.local",
+                                  "email":"admin2@cheongnim.local",
                                   "password":"Demo1234!",
                                   "name":"관리자2",
                                   "role":"ADMIN"
                                 }
                                 """))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.email").value("admin2@cheongrim.local"))
+                .andExpect(jsonPath("$.data.email").value("admin2@cheongnim.local"))
                 .andExpect(jsonPath("$.data.role").value("ADMIN"));
     }
 

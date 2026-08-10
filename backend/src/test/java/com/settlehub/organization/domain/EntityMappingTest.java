@@ -45,7 +45,7 @@ class EntityMappingTest {
         Agency agency = agencyRepository.save(Agency.create("AG-SEOUL-01", "서울배달"));
         Merchant merchant = merchantRepository.save(Merchant.create(agency, "M-001", "김밥천국"));
         UserAccount admin = userAccountRepository.save(
-                UserAccount.admin("admin@cheongrim.local", "hash", "관리자")
+                UserAccount.admin("admin@cheongnim.local", "hash", "관리자")
         );
         userAccountRepository.save(
                 UserAccount.agencyUser("agency@seoul.local", "hash", "대행담당", agency)
@@ -96,7 +96,7 @@ class EntityMappingTest {
         assertThat(saved.getLines()).hasSize(1);
         assertThat(saved.getLines().get(0).getMerchantSettlementAmount()).isEqualTo(14_000);
         assertThat(saved.getTotalMerchantSettlementAmount()).isEqualTo(14_000);
-        assertThat(userAccountRepository.findByEmail("admin@cheongrim.local")).isPresent();
+        assertThat(userAccountRepository.findByEmail("admin@cheongnim.local")).isPresent();
         assertThat(admin.getRole()).isEqualTo(UserRole.ADMIN);
         assertThat(feePolicyRepository.findEffectiveGlobalPolicy(orderedAt)).isPresent();
         assertThat(deliveryOrderRepository.existsByAgencyIdAndExternalOrderId(agency.getId(), "ORD-001")).isTrue();

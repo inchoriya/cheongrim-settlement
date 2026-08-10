@@ -30,8 +30,11 @@ import java.util.List;
 public class DemoDataLoader implements ApplicationRunner {
 
     public static final String DEMO_PASSWORD = "Demo1234!";
-    public static final String ADMIN_EMAIL = "admin@cheongrim.local";
-    private static final String LEGACY_ADMIN_EMAIL = "admin@settlehub.local";
+    public static final String ADMIN_EMAIL = "admin@cheongnim.local";
+    private static final List<String> LEGACY_ADMIN_EMAILS = List.of(
+            "admin@settlehub.local",
+            "admin@cheongrim.local"
+    );
     private static final String SEED_ORDER_MARKER = "ORD-SEED-001";
 
     private final UserAccountRepository userAccountRepository;
@@ -127,13 +130,15 @@ public class DemoDataLoader implements ApplicationRunner {
     }
 
     private void migrateLegacyAdminEmail() {
-        userAccountRepository.findByEmail(LEGACY_ADMIN_EMAIL).ifPresent(user -> {
-            if (userAccountRepository.existsByEmail(ADMIN_EMAIL)) {
-                log.warn("Both legacy and new admin emails exist; leaving legacy account as-is");
-                return;
-            }
-            user.changeEmail(ADMIN_EMAIL);
-            log.info("Migrated demo admin email {} -> {}", LEGACY_ADMIN_EMAIL, ADMIN_EMAIL);
-        });
+        for (String legacyEmail : LEGACY_ADMIN_EMAILS) {
+            userAccountRepository.findByEmail(legacyEmail).ifPresent(user -> {
+                if (userAccountRepository.existsByEmail(ADMIN_EMAIL)) {
+                    log.warn("Both legacy and new admin emails exist; leaving {} as-is", legacyEmail);
+                    return;
+                }
+                user.changeEmail(ADMIN_EMAIL);
+                log.info("Migrated demo admin email {} -> {}", legacyEmail, ADMIN_EMAIL);
+            });
+        }
     }
 }

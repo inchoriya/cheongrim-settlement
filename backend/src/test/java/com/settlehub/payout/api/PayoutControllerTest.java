@@ -49,7 +49,7 @@ class PayoutControllerTest {
     @Test
     @DisplayName("Mock 지급 성공 시 settlement가 PAID가 된다")
     void payoutSuccess() throws Exception {
-        String adminToken = login("admin@cheongrim.local", "Demo1234!");
+        String adminToken = login("admin@cheongnim.local", "Demo1234!");
         long settlementId = prepareReadySettlement(adminToken, "2026-10-01T00:00:00", "2026-10-08T00:00:00",
                 "2026-10-02T10:00:00", 20_000);
 
@@ -80,7 +80,7 @@ class PayoutControllerTest {
     @Test
     @DisplayName("forceFail 시 PAYOUT_FAILED가 되고 재시도할 수 있다")
     void payoutFailThenRetry() throws Exception {
-        String adminToken = login("admin@cheongrim.local", "Demo1234!");
+        String adminToken = login("admin@cheongnim.local", "Demo1234!");
         long settlementId = prepareReadySettlement(adminToken, "2026-11-01T00:00:00", "2026-11-08T00:00:00",
                 "2026-11-02T10:00:00", 20_000);
 

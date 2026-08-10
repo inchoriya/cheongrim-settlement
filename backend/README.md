@@ -18,7 +18,7 @@ JDK 17이 필요합니다. `JAVA_HOME`은 JDK 루트 경로여야 합니다.
 시드가 켜져 있으면(`settlehub.seed.enabled=true`) 아래 계정이 만들어집니다.  
 비밀번호: `Demo1234!`
 
-- admin@cheongrim.local  
+- admin@cheongnim.local  
 - agency@seoul.local  
 - merchant@kimbap.local  
 

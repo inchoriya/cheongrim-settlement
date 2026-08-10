@@ -21,13 +21,13 @@ class JwtTokenProviderTest {
 
     @Test
     void createAndParseToken() {
-        AuthUser user = AuthUser.fromToken(1L, "admin@cheongrim.local", UserRole.ADMIN, null, null);
+        AuthUser user = AuthUser.fromToken(1L, "admin@cheongnim.local", UserRole.ADMIN, null, null);
 
         String token = provider.createAccessToken(user);
         AuthUser parsed = provider.parseToken(token);
 
         assertThat(parsed.id()).isEqualTo(1L);
-        assertThat(parsed.email()).isEqualTo("admin@cheongrim.local");
+        assertThat(parsed.email()).isEqualTo("admin@cheongnim.local");
         assertThat(parsed.role()).isEqualTo(UserRole.ADMIN);
         assertThat(provider.isValid(token)).isTrue();
         assertThat(provider.isValid("invalid.token.value")).isFalse();
