@@ -48,3 +48,8 @@ logs/
 
 # Demo recording temp
 docs/demo-assets/raw-video/
+
+# Personal career docs (do not publish)
+이력서*.md
+resume*.md
+제출서류/

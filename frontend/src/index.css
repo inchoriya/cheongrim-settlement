@@ -146,6 +146,7 @@ h4 {
 
 .sidebar nav {
   display: grid;
+  align-content: start;
   gap: 2px;
   flex: 1;
 }
