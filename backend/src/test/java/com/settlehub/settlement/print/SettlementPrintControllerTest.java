@@ -123,9 +123,10 @@ class SettlementPrintControllerTest {
         String agencyToken = login("agency@seoul.local", "Demo1234!");
         String adminToken = login("admin@cheongnim.local", "Demo1234!");
 
-        // 다른 테스트와 겹치지 않는 기간
-        createOrder(agencyToken, "PRINT-O1-" + System.nanoTime(), 20_000, "2026-10-06T10:00:00");
-        createOrder(agencyToken, "PRINT-O2-" + System.nanoTime(), 13_500, "2026-10-07T12:00:00");
+        // 다른 테스트와 겹치지 않는 기간.
+        // 배달팁은 주문금액과 분리되므로, 팁이 붙은 주문을 반드시 섞어 검산식을 검증한다.
+        createOrder(agencyToken, "PRINT-O1-" + System.nanoTime(), 20_000, 0, "2026-10-06T10:00:00");
+        createOrder(agencyToken, "PRINT-O2-" + System.nanoTime(), 13_500, 2_000, "2026-10-07T12:00:00");
 
         mockMvc.perform(post("/api/v1/settlements/batch")
                         .header("Authorization", "Bearer " + adminToken)
@@ -166,7 +167,8 @@ class SettlementPrintControllerTest {
         assertThat(html).doesNotContain("(불일치");
     }
 
-    private void createOrder(String token, String externalId, long amount, String orderedAt) throws Exception {
+    private void createOrder(String token, String externalId, long amount, long tip, String orderedAt)
+            throws Exception {
         mockMvc.perform(post("/api/v1/orders")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -175,10 +177,10 @@ class SettlementPrintControllerTest {
                                   "externalOrderId":"%s",
                                   "merchantId":%d,
                                   "orderAmount":%d,
-                                  "deliveryTip":0,
+                                  "deliveryTip":%d,
                                   "orderedAt":"%s"
                                 }
-                                """.formatted(externalId, merchantId, amount, orderedAt)))
+                                """.formatted(externalId, merchantId, amount, tip, orderedAt)))
                 .andExpect(status().isOk());
     }
 

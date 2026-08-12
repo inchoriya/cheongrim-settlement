@@ -74,12 +74,12 @@ public class SettlementPrintController {
     ) {
         SettlementResponse settlement = settlementService.get(actor, id);
 
-        // 문서로 고정한 검산식: 가맹점 + 플랫폼 + 대행사 + 라이더(팁 포함) = 주문금액
+        // docs/settlement-rules.md 의 검산식: merchant + platform + agency + rider == orderAmount
+        // 배달팁은 주문금액과 분리해 라이더에게 전달되므로 검산 대상이 아니다.
         long distributed = settlement.totalMerchantSettlementAmount()
                 + settlement.totalPlatformFeeAmount()
                 + settlement.totalAgencySettlementAmount()
-                + settlement.totalRiderFeeAmount()
-                + settlement.totalTipAmount();
+                + settlement.totalRiderFeeAmount();
 
         model.addAttribute("s", settlement);
         model.addAttribute("actor", actor);

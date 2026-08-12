@@ -157,7 +157,7 @@
     </table>
 
     <div class="check" th:classappend="${balanced} ? 'ok' : 'ng'">
-        <span class="formula">검산식 — 가맹점 정산액 + 플랫폼 수수료 + 대행사 정산액 + 라이더 배송료 + 배달팁 = 주문금액</span><br>
+        <span class="formula">검산식 — 가맹점 정산액 + 플랫폼 수수료 + 대행사 정산액 + 라이더 배송료 = 주문금액 <em>(배달팁은 주문금액과 분리)</em></span><br>
         <b th:text="${#numbers.formatInteger(distributed, 0, 'COMMA')}">0</b>
         <span th:text="${balanced} ? ' = ' : ' ≠ '"> = </span>
         <b th:text="${#numbers.formatInteger(s.totalOrderAmount, 0, 'COMMA')}">0</b>
