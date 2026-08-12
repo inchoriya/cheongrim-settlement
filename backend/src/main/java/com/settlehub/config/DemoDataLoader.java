@@ -1,5 +1,6 @@
 package com.settlehub.config;
 
+import com.settlehub.auth.security.AuthUser;
 import com.settlehub.order.domain.DeliveryOrder;
 import com.settlehub.order.domain.DeliveryOrderRepository;
 import com.settlehub.order.domain.OrderStatus;
@@ -11,6 +12,11 @@ import com.settlehub.organization.domain.UserAccount;
 import com.settlehub.organization.domain.UserAccountRepository;
 import com.settlehub.policy.domain.FeePolicy;
 import com.settlehub.policy.domain.FeePolicyRepository;
+import com.settlehub.settlement.api.SettlementBatchRequest;
+import com.settlehub.settlement.api.SettlementBatchResponse;
+import com.settlehub.settlement.api.SettlementBatchService;
+import com.settlehub.settlement.domain.SettlementRepository;
+import com.settlehub.settlement.domain.SettlementStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
@@ -21,6 +27,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.EnumSet;
 import java.util.List;
 
 @Slf4j
@@ -36,12 +43,16 @@ public class DemoDataLoader implements ApplicationRunner {
             "admin@cheongrim.local"
     );
     private static final String SEED_ORDER_MARKER = "ORD-SEED-001";
+    private static final LocalDateTime SEED_PERIOD_START = LocalDateTime.of(2026, 8, 1, 0, 0);
+    private static final LocalDateTime SEED_PERIOD_END = LocalDateTime.of(2026, 8, 8, 0, 0);
 
     private final UserAccountRepository userAccountRepository;
     private final AgencyRepository agencyRepository;
     private final MerchantRepository merchantRepository;
     private final FeePolicyRepository feePolicyRepository;
     private final DeliveryOrderRepository deliveryOrderRepository;
+    private final SettlementRepository settlementRepository;
+    private final SettlementBatchService settlementBatchService;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -54,6 +65,7 @@ public class DemoDataLoader implements ApplicationRunner {
         }
 
         ensureDemoOrders();
+        ensureDemoSettlements();
     }
 
     private void seedOrganizationsAndUsers() {
@@ -116,6 +128,46 @@ public class DemoDataLoader implements ApplicationRunner {
 
         deliveryOrderRepository.saveAll(orders);
         log.info("Demo orders seeded: {}건 (기간 2026-08-01 ~ 2026-08-08 배치용)", orders.size());
+    }
+
+    /**
+     * 시드 주문으로 정산 배치를 한 번 돌려 둔다.
+     *
+     * <p>정산 건이 없으면 최초 실행 직후 목록·정산서 화면이 비어 있어, 데모를 보는 쪽이
+     * 배치를 직접 돌리기 전까지는 아무것도 확인할 수 없다. 실제 배치 경로를 그대로 태워
+     * 화면에서 보이는 값과 계산 로직이 어긋나지 않게 한다.
+     *
+     * <p>이미 해당 기간에 정산이 있으면 손대지 않는다. 데모 중 확정·지급까지 진행한 뒤
+     * 재시작하면 배치가 거부되는데, 그것 때문에 애플리케이션 기동이 실패하면 안 되기 때문이다.
+     */
+    private void ensureDemoSettlements() {
+        Agency agency = agencyRepository.findByCode("AG-SEOUL-01").orElse(null);
+        if (agency == null) {
+            return;
+        }
+        boolean alreadySettled = settlementRepository.existsByAgencyIdAndPeriodStartAndPeriodEndAndStatusIn(
+                agency.getId(), SEED_PERIOD_START, SEED_PERIOD_END, EnumSet.allOf(SettlementStatus.class));
+        if (alreadySettled) {
+            return;
+        }
+
+        UserAccount admin = userAccountRepository.findByEmail(ADMIN_EMAIL).orElse(null);
+        if (admin == null) {
+            log.warn("Skip demo settlements: admin account not found");
+            return;
+        }
+
+        try {
+            SettlementBatchResponse result = settlementBatchService.runBatch(
+                    AuthUser.from(admin),
+                    new SettlementBatchRequest(SEED_PERIOD_START, SEED_PERIOD_END, agency.getId())
+            );
+            log.info("Demo settlements seeded: {}건 (주문 {}건 처리, 기간 {} ~ {})",
+                    result.createdSettlementCount(), result.processedOrderCount(),
+                    SEED_PERIOD_START.toLocalDate(), SEED_PERIOD_END.toLocalDate());
+        } catch (RuntimeException ex) {
+            log.warn("Skip demo settlement seeding: {}", ex.getMessage());
+        }
     }
 
     private static DeliveryOrder order(

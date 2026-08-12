@@ -93,12 +93,18 @@ class SettlementPrintControllerTest {
     }
 
     @Test
-    @DisplayName("로그인한 운영자에게 정산 목록 화면을 렌더링한다")
+    @DisplayName("최초 실행 직후에도 시드 정산이 있어 목록이 비어 있지 않다")
     void rendersListForAuthenticatedUser() throws Exception {
-        mockMvc.perform(get("/print/settlements").with(user(actor("admin@cheongnim.local"))))
+        String html = mockMvc.perform(get("/print/settlements").with(user(actor("admin@cheongnim.local"))))
                 .andExpect(status().isOk())
                 .andExpect(view().name("print/list"))
-                .andExpect(content().contentTypeCompatibleWith("text/html"));
+                .andExpect(content().contentTypeCompatibleWith("text/html"))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        assertThat(html).doesNotContain("조회된 정산 건이 없습니다");
+        assertThat(html).contains("김밥천국");
     }
 
     @Test
