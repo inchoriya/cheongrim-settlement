@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>정산 목록 · 정산서 출력</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 32px;
+            background: #f4f5f7;
+            font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+            color: #1f2328;
+        }
+        .wrap { max-width: 1080px; margin: 0 auto; }
+        header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        h1 { margin: 0; font-size: 20px; }
+        .who { font-size: 13px; color: #656d76; }
+        .who strong { color: #1f2328; }
+        .panel {
+            background: #fff;
+            border: 1px solid #d8dbdf;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .filter {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding: 14px 16px;
+            border-bottom: 1px solid #e6e8ea;
+            font-size: 13px;
+        }
+        select, .btn {
+            padding: 6px 10px;
+            border: 1px solid #d8dbdf;
+            border-radius: 4px;
+            background: #fff;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .btn.plain { background: none; border: 0; color: #656d76; text-decoration: underline; padding: 0; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th, td { padding: 10px 12px; border-bottom: 1px solid #eceef0; text-align: left; }
+        th { background: #fafbfc; font-weight: 600; color: #656d76; }
+        td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+        tbody tr:hover { background: #fafbfc; }
+        a { color: #24518f; }
+        .tag {
+            display: inline-block;
+            padding: 2px 7px;
+            border-radius: 10px;
+            font-size: 11px;
+            background: #eef0f2;
+            color: #4a5157;
+        }
+        .tag.CONFIRMED, .tag.PAID { background: #e5f5ea; color: #1a7f3c; }
+        .tag.HELD, .tag.PAYOUT_FAILED { background: #ffeef0; color: #b02b38; }
+        .empty { padding: 40px; text-align: center; color: #656d76; font-size: 14px; }
+        .pager { display: flex; gap: 12px; align-items: center; justify-content: center; padding: 14px; font-size: 13px; }
+        .pager span { color: #656d76; }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <header>
+        <h1>정산 목록</h1>
+        <div class="who">
+            <strong th:text="${actor.email}">user</strong>
+            · <span th:text="${actor.role}">ROLE</span>
+            ·
+            <form method="post" th:action="@{/print/logout}" style="display:inline">
+                <button type="submit" class="btn plain">로그아웃</button>
+            </form>
+        </div>
+    </header>
+
+    <div class="panel">
+        <form class="filter" method="get" th:action="@{/print/settlements}">
+            <label for="status">상태</label>
+            <select id="status" name="status">
+                <option value="">전체</option>
+                <option th:each="st : ${statuses}"
+                        th:value="${st}"
+                        th:text="${st}"
+                        th:selected="${st == status}">STATUS</option>
+            </select>
+            <button type="submit" class="btn">조회</button>
+        </form>
+
+        <table th:if="${!result.content.isEmpty()}">
+            <thead>
+            <tr>
+                <th>정산기간</th>
+                <th>대행사</th>
+                <th>가맹점</th>
+                <th class="num">건수</th>
+                <th class="num">주문금액</th>
+                <th class="num">가맹점 정산액</th>
+                <th>상태</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="s : ${result.content}">
+                <td th:text="${#temporals.format(s.periodStart, 'yyyy-MM-dd')} + ' ~ ' + ${#temporals.format(s.periodEnd, 'MM-dd')}">기간</td>
+                <td th:text="${s.agencyCode}">AG</td>
+                <td th:text="${s.merchantName}">가맹점</td>
+                <td class="num" th:text="${s.orderCount}">0</td>
+                <td class="num" th:text="${#numbers.formatInteger(s.totalOrderAmount, 0, 'COMMA')} + '원'">0원</td>
+                <td class="num" th:text="${#numbers.formatInteger(s.totalMerchantSettlementAmount, 0, 'COMMA')} + '원'">0원</td>
+                <td><span class="tag" th:classappend="${s.status}" th:text="${s.status}">STATUS</span></td>
+                <td><a th:href="@{/print/settlements/{id}(id=${s.id})}">정산서</a></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="empty" th:if="${result.content.isEmpty()}">
+            조회된 정산 건이 없습니다.
+        </div>
+
+        <div class="pager" th:if="${result.totalPages > 1}">
+            <a th:if="${result.page > 0}"
+               th:href="@{/print/settlements(page=${result.page - 1}, status=${status})}">이전</a>
+            <span th:text="${result.page + 1} + ' / ' + ${result.totalPages}">1 / 1</span>
+            <a th:if="${result.page + 1 < result.totalPages}"
+               th:href="@{/print/settlements(page=${result.page + 1}, status=${status})}">다음</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

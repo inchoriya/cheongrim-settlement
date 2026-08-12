@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>조회할 수 없습니다 · 정산서 출력</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f4f5f7;
+            font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+            color: #1f2328;
+        }
+        .card {
+            width: 420px;
+            padding: 32px;
+            background: #fff;
+            border: 1px solid #d8dbdf;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .code { font-size: 32px; font-weight: 700; color: #b02b38; margin-bottom: 8px; }
+        p { margin: 0 0 20px; font-size: 14px; color: #4a5157; }
+        a { color: #24518f; font-size: 13px; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="code" th:text="${status}">403</div>
+    <p th:text="${message}">조회 권한이 없습니다.</p>
+    <a th:href="@{/print/settlements}">← 정산 목록으로</a>
+</div>
+</body>
+</html>

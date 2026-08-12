@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>정산서 출력 · 운영자 로그인</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f4f5f7;
+            font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+            color: #1f2328;
+        }
+        .card {
+            width: 360px;
+            padding: 32px;
+            background: #fff;
+            border: 1px solid #d8dbdf;
+            border-radius: 6px;
+        }
+        h1 { margin: 0 0 4px; font-size: 18px; }
+        .sub { margin: 0 0 24px; font-size: 13px; color: #656d76; }
+        label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; }
+        input {
+            width: 100%;
+            padding: 9px 10px;
+            margin-bottom: 16px;
+            border: 1px solid #d8dbdf;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            border: 0;
+            border-radius: 4px;
+            background: #1f2328;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .alert {
+            margin-bottom: 16px;
+            padding: 9px 10px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        .alert.error { background: #ffeef0; color: #b02b38; }
+        .alert.info { background: #eef4ff; color: #24518f; }
+        .hint { margin-top: 20px; font-size: 12px; color: #656d76; line-height: 1.7; }
+        .hint code { background: #f0f1f3; padding: 1px 4px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>정산서 출력</h1>
+    <p class="sub">운영자 전용 화면입니다.</p>
+
+    <div class="alert error" th:if="${param.error}">이메일 또는 비밀번호가 올바르지 않습니다.</div>
+    <div class="alert info" th:if="${param.logout}">로그아웃되었습니다.</div>
+
+    <form method="post" th:action="@{/print/login}">
+        <label for="username">이메일</label>
+        <input type="email" id="username" name="username" required autofocus>
+
+        <label for="password">비밀번호</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="submit">로그인</button>
+    </form>
+
+    <p class="hint">
+        데모 계정 — <code>admin@cheongnim.local</code> / <code>agency@seoul.local</code> / <code>merchant@kimbap.local</code><br>
+        비밀번호는 모두 <code>Demo1234!</code> 입니다. 계정 역할에 따라 보이는 정산 건이 달라집니다.
+    </p>
+</div>
+</body>
+</html>
