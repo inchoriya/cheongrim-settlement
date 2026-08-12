@@ -74,8 +74,18 @@ docker compose up --build -d
 | 대행사 | agency@seoul.local |
 | 가맹점 | merchant@kimbap.local |
 
-시드에 대행사·가맹점·수수료 정책·주문 샘플(`ORD-SEED-001`~`010`, 2026-08-01~08-08)이 들어 있습니다.  
-관리자로 로그인한 뒤 정산 메뉴에서 해당 기간으로 배치를 실행하면 바로 확인할 수 있습니다.
+시드에 대행사·가맹점·수수료 정책·주문 샘플(`ORD-SEED-001`~`010`, 2026-08-01~08-08)이 들어 있고,  
+해당 기간 정산 배치까지 실행된 상태로 뜹니다. 로그인하면 바로 정산 건이 보입니다.
+
+### 정산서 출력 (SSR)
+
+인쇄·PDF 보관용 정산서는 Thymeleaf로 서버에서 렌더링합니다.
+
+- 로컬: http://localhost:8080/print/settlements
+- Docker: http://localhost/print/settlements
+
+브라우저가 주소창으로 여는 페이지에는 `Authorization` 헤더를 실을 수 없어, 이 경로만 폼 로그인 + 세션으로 인증합니다.
+API(`/api/v1/**`)는 stateless JWT 그대로입니다. 계정은 위 데모 계정을 그대로 쓰며, 역할에 따라 보이는 정산 건이 달라집니다.
 
 짧은 시연 순서와 계산 예시는 [docs/demo.md](./docs/demo.md)를 보면 됩니다.
 
