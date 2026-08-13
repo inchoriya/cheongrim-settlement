@@ -32,6 +32,8 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run tests
+        env:
+          TZ: UTC
         run: ./gradlew test --no-daemon
 
       - name: Upload test report on failure
